@@ -1,0 +1,5 @@
+django
+mysqlclient
+requests
+bs4
+cssutils
