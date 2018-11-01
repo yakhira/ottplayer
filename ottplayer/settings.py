@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'collector',
-    'playlist',
-    'database'
+    'database',
+    'disperser'
 ]
 
 MIDDLEWARE = [
@@ -84,7 +84,7 @@ DATABASES = {
         'PASSWORD': '',
         'NAME': '',
         'HOST': '',
-        'PORT': '3306'
+        'PORT': ''
     }
 }
 
@@ -126,5 +126,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+REPOSITORY = 'git@github.com:yakhira/playlitsts.git'
+PATH = BASE_DIR + '/playlist'
+SSH_KEY_FILE = BASE_DIR + '/github.ssh'
 
-SERIALS_URL = 'http://fanserials.care/'
+os.environ['GIT_SSH_COMMAND'] = 'ssh -i %s -o StrictHostKeyChecking=no' % SSH_KEY_FILE

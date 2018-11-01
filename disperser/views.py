@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from database.models import Seasons, Episodes, Tvshows
-from django.http import HttpResponse
+from disperser.models import GitHub
 
 # Create your views here.
-def playlist(path):
+def push_playlist(repository, path):
+    playlist_file = '%s/playlist.m3u8' % path
     m3ulist = '#EXTM3U\r\n'    
         
     for tvshow in Tvshows.objects.all():
@@ -12,5 +13,13 @@ def playlist(path):
             m3ulist += '#EXTGRP:%s\r\n' % tvshow.name
             m3ulist += '%s\r\n' % episode.url 
     
-    response = HttpResponse(m3ulist, content_type='application/octet-stream')
-    return response
+    repo = GitHub(repository, path)
+    repo.pull()
+    
+    with open(playlist_file, 'w') as infile:
+        infile.write(m3ulist)
+    
+    repo.add(playlist_file)
+    repo.push()
+        
+    return m3ulist
