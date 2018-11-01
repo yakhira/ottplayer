@@ -6,7 +6,7 @@ ENV WORKDIR /usr/src/app
 
 WORKDIR $WORKDIR
 
-RUN apk add --no-cache bash gcc autoconf automake libtool libpng-dev musl-dev libffi-dev make mysql-client mysql-dev
+RUN apk add --no-cache git bash gcc autoconf automake libtool libpng-dev musl-dev libffi-dev make mysql-client mysql-dev
 
 COPY . $WORKDIR/
 
