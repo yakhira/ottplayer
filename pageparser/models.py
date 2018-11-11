@@ -43,7 +43,7 @@ class PageParser(object):
             
                 description = link.get_text().strip().replace('"', "'")
 
-                episode_url = '%s/%s#lostfilm' % (url, link.get('href'))
+                episode_url = '%s%s#lostfilm' % (url, link.get('href'))
             
                 episodes.append(
                     dict(
@@ -58,7 +58,8 @@ class PageParser(object):
         return reversed(episodes)
     
     def get_player(self):
-        return self.__soup.find(itemprop="embedUrl").get('href')
+        embedUrl = self.__soup.find(id="iframe-player")
+        return self.__soup.find(id="iframe-player").get('src')
         
     def get_stream(self, url_id):
         player = self.__soup.find(id='videoplayer%s' % url_id)
