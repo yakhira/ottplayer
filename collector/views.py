@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from database.models import Tvshows, Seasons, Episodes
 from pageparser.models import PageParser
+from urllib.parse import urlparse
 
 import requests
 
@@ -27,12 +28,16 @@ def parse_episodes():
             if season.season_id != last_season.season_id:
                 if Episodes.objects.filter(season=season.season_id):
                     continue
-        
+
+            season_url = urlparse(season.url)
+            episodes_domain = '%s://%s' % (season_url.scheme, season_url.netloc)
+
             response = requests.get(season.url, verify=False)
             if response.status_code == 200:
                 parser = PageParser(response.content)
                 episodes.extend(
                     parser.get_episodes(
+                        episodes_domain,
                         season.show_id,
                         season.season_id
                     )
@@ -58,6 +63,7 @@ def extract_stream(episode):
     return episode
 
 def save_episode(episode):
+    #print(episode['url'])
     Episodes.objects.update_or_create(
         description=episode['description'],
         defaults=episode

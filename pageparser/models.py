@@ -30,7 +30,7 @@ class PageParser(object):
         ]
         
 
-    def get_episodes(self, show_id, season_id):
+    def get_episodes(self, url, show_id, season_id):
         episodes = []
         episodesList = self.__soup.find(id="serias-list")
         
@@ -43,13 +43,13 @@ class PageParser(object):
             
                 description = link.get_text().strip().replace('"', "'")
 
-                url = '%s#lostfilm' % link.get('href')
+                episode_url = '%s/%s#lostfilm' % (url, link.get('href'))
             
                 episodes.append(
                     dict(
                         show_id=show_id,
                         season_id=season_id,
-                        url=url,
+                        url=episode_url,
                         background_image=background_image_url,
                         description=description
                     )
