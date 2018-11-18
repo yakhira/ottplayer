@@ -10,8 +10,17 @@ def parse_seasons():
     for tvshow in Tvshows.objects.all():
         response = requests.get(tvshow.url, verify=False)
         if response.status_code == 200:
+            tvshow_url = urlparse(tvshow.url)
+            tvshow_domain = '%s://%s' % (tvshow_url.scheme, tvshow_url.netloc)
+
             parser = PageParser(response.content)
             for season in parser.get_seasons(tvshow.show_id):
+                season_url = urlparse(season['url'])
+                season['url'] = '%s%s' % (
+                    tvshow_domain,
+                    season_url.path
+                )
+
                 Seasons.objects.update_or_create(
                     url=season['url'],
                     defaults=season
