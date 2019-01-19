@@ -11,5 +11,8 @@ Parser to store seasons, episodes in mysql db.
 ## Usage
 
 ```bash
-# docker run ottplayer python manage.py help
+# docker build -t ottplayer .
+# docker run --rm ottplayer python manage.py parse --seasons
+# docker run --rm ottplayer python manage.py parse --episodes
+# docker run --rm ottplayer python manage.py save
 ```
